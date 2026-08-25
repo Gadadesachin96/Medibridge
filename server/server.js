@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
@@ -25,10 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
-app.use(
-  "/api/appointments",
-  require("./routes/appointmentRoutes",appointmentRoutes)
-);
+
 app.get("/", (req, res) => {
   res.json({
     message: "MediBridge API is running",
