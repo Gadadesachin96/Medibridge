@@ -5,7 +5,7 @@ const {
   getDoctors,
   updateDoctor,
   toggleDoctorStatus,
-} = require("../controllers/doctorController");
+} = require("../controllers/DoctorController");
 
 const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
