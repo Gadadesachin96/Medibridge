@@ -7,7 +7,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    cpassword: "",
+    
   });
   const navigate = useNavigate();
 
@@ -17,18 +17,47 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await api.post("/auth/register", formData);
+  //     console.log("REGISTER RESPONSE:", response.data);
+
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.post("/auth/register", formData);
-      console.log("REGISTER RESPONSE:", response.data);
+  e.preventDefault();
 
-      navigate("/login");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (formData.password !== formData.cpassword) {
+    alert("Passwords do not match");
+    return;
+  }
 
+  try {
+    const response = await api.post("/auth/register", {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    console.log("REGISTER RESPONSE:", response.data);
+
+    alert("Registration successful");
+    navigate("/login");
+  } catch (error) {
+    console.log("REGISTER ERROR:", error.response?.data || error.message);
+
+    alert(
+      error.response?.data?.message || "Registration failed"
+    );
+  }
+};
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-100 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
@@ -122,7 +151,7 @@ const Register = () => {
           </div>
 
           {/* Role */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Register As
             </label>
@@ -136,7 +165,7 @@ const Register = () => {
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
             </select>
-          </div>
+          </div> */}
 
           {/* Terms */}
           <div className="flex items-start gap-3">

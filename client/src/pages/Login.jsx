@@ -30,18 +30,14 @@ const Login = () => {
       console.log("LOGIN RESPONSE:", response.data);
 
       const user = response.data.user;
-
-      // Redux me user save
       dispatch(setUser(user));
-      // alert("Login successful");
-      // navigate("/admin/dashboard");
-      // navigate("/admin/dashboard");navigate
+   
 
       // Role based navigation
     if (user.role === "admin") {
       navigate("/admin/dashboard");
     } else if (user.role === "doctor") {
-      navigate("/");
+      navigate("/doctor/dashboard");
     } else if (user.role === "patient") {
       navigate("/pDoctor");
     } else {

@@ -22,7 +22,7 @@ const AdminLayout = () => {
         <nav className="p-4 space-y-2">
 
           <button
-            onClick={() => navigate("/admin")}
+            onClick={() => navigate("/admin/dashboard")}
             className="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-800"
           >
             Dashboard
@@ -53,21 +53,19 @@ const AdminLayout = () => {
 
       </aside>
 
+
       {/* Main Content */}
       <main className="flex-1">
 
         <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+
           <h2 className="font-semibold text-gray-700">
-            Admin Dashboard
+            Admin Panel
           </h2>
 
-          <button
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          >
-            Logout
-          </button>
         </header>
 
+        {/* VERY IMPORTANT */}
         <Outlet />
 
       </main>
