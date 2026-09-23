@@ -173,6 +173,73 @@ const getDoctors = async (req, res) => {
 };
 
 
+// const updateDoctor = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const {
+//       name,
+//       email,
+//       specialization,
+//       qualification,
+//       experience,
+//       phone,
+//       fees,
+//       availableDays,
+//       availableTime,
+//     } = req.body;
+
+//     const doctor = await User.findOne({
+//       _id: id,
+//       role: "doctor",
+//     });
+
+//     if (!doctor) {
+//       return res.status(404).json({
+//         message: "Doctor not found",
+//       });
+//     }
+
+//     doctor.name = name;
+//     doctor.email = email;
+//     doctor.specialization = specialization;
+//     doctor.qualification = qualification;
+//     doctor.experience = experience;
+//     doctor.phone = phone;
+//     doctor.fees = fees;
+//     doctor.availableDays = availableDays;
+//     doctor.availableTime = availableTime;
+
+//     await doctor.save();
+
+//     res.status(200).json({
+//       message: "Doctor updated successfully",
+//       doctor: {
+//         id: doctor._id,
+//         name: doctor.name,
+//         email: doctor.email,
+//         role: doctor.role,
+//         specialization: doctor.specialization,
+//         qualification: doctor.qualification,
+//         experience: doctor.experience,
+//         phone: doctor.phone,
+//         fees: doctor.fees,
+//         availableDays: doctor.availableDays,
+//         availableTime: doctor.availableTime,
+//         isActive: doctor.isActive,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Update doctor error:", error);
+
+//     res.status(500).json({
+//       message: "Failed to update doctor",
+//       error: error.message,
+//     });
+//   }
+// };
+
+
 const updateDoctor = async (req, res) => {
   try {
     const { id } = req.params;
@@ -183,16 +250,13 @@ const updateDoctor = async (req, res) => {
       specialization,
       qualification,
       experience,
-      phone,
       fees,
       availableDays,
       availableTime,
     } = req.body;
 
-    const doctor = await User.findOne({
-      _id: id,
-      role: "doctor",
-    });
+    // Find Doctor profile
+    const doctor = await Doctor.findById(id).populate("user");
 
     if (!doctor) {
       return res.status(404).json({
@@ -200,12 +264,16 @@ const updateDoctor = async (req, res) => {
       });
     }
 
-    doctor.name = name;
-    doctor.email = email;
+    // Update User information
+    doctor.user.name = name;
+    doctor.user.email = email;
+
+    await doctor.user.save();
+
+    // Update Doctor information
     doctor.specialization = specialization;
     doctor.qualification = qualification;
     doctor.experience = experience;
-    doctor.phone = phone;
     doctor.fees = fees;
     doctor.availableDays = availableDays;
     doctor.availableTime = availableTime;
@@ -214,20 +282,7 @@ const updateDoctor = async (req, res) => {
 
     res.status(200).json({
       message: "Doctor updated successfully",
-      doctor: {
-        id: doctor._id,
-        name: doctor.name,
-        email: doctor.email,
-        role: doctor.role,
-        specialization: doctor.specialization,
-        qualification: doctor.qualification,
-        experience: doctor.experience,
-        phone: doctor.phone,
-        fees: doctor.fees,
-        availableDays: doctor.availableDays,
-        availableTime: doctor.availableTime,
-        isActive: doctor.isActive,
-      },
+      doctor,
     });
   } catch (error) {
     console.error("Update doctor error:", error);
@@ -239,14 +294,48 @@ const updateDoctor = async (req, res) => {
   }
 };
 
+// const toggleDoctorStatus = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const doctor = await User.findOne({
+//       _id: id,
+//       role: "doctor",
+//     });
+
+//     if (!doctor) {
+//       return res.status(404).json({
+//         message: "Doctor not found",
+//       });
+//     }
+
+//     doctor.isActive = !doctor.isActive;
+
+//     await doctor.save();
+
+//     res.status(200).json({
+//       message: doctor.isActive
+//         ? "Doctor activated successfully"
+//         : "Doctor deactivated successfully",
+
+//       isActive: doctor.isActive,
+//     });
+//   } catch (error) {
+//     console.error("Toggle doctor status error:", error);
+
+//     res.status(500).json({
+//       message: "Failed to update doctor status",
+//       error: error.message,
+//     });
+//   }
+// };
+
+
 const toggleDoctorStatus = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const doctor = await User.findOne({
-      _id: id,
-      role: "doctor",
-    });
+    const doctor = await Doctor.findById(id);
 
     if (!doctor) {
       return res.status(404).json({
@@ -262,7 +351,6 @@ const toggleDoctorStatus = async (req, res) => {
       message: doctor.isActive
         ? "Doctor activated successfully"
         : "Doctor deactivated successfully",
-
       isActive: doctor.isActive,
     });
   } catch (error) {
